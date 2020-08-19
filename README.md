@@ -3,6 +3,7 @@
 Compute the intersection over union error of groups of polygons (UDT regions).
 
 ```javascript
+// install with npm install udt-iou-error
 const getIOU = require("udt-iou-error")
 
 const annotation1 = [
