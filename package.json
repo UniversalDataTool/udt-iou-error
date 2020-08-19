@@ -1,0 +1,13 @@
+{
+  "name": "udt-iou-error",
+  "version": "0.0.1",
+  "scripts": {
+    "test": "ava test.js"
+  },
+  "dependencies": {
+    "polygon-tools": "^0.4.8"
+  },
+  "devDependencies": {
+    "ava": "^3.11.1"
+  }
+}
