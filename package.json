@@ -1,6 +1,6 @@
 {
   "name": "udt-iou-error",
-  "version": "0.0.1",
+  "version": "0.0.1-beta.1",
   "scripts": {
     "test": "ava test.js"
   },
