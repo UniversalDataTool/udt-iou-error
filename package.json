@@ -1,8 +1,10 @@
 {
   "name": "udt-iou-error",
-  "version": "0.1.0",
+  "version": "0.1.2",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "ava test.js"
+    "test": "ava test.js",
+    "build": "parcel build index.js"
   },
   "dependencies": {
     "polygon-tools": "^0.4.8"
