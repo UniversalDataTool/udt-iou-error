@@ -1,8 +1,9 @@
 # UDT IOU Error
 
-Compute the intersection over union error of groups of polygons (UDT regions).
+Compute the intersection over union error of groups of polygons ([UDT regions](https://github.com/UniversalDataTool/udt-format/blob/master/interfaces/image_segmentation.md)). Created primarily for use with the [Universal Data Tool](https://universaldatatool.com).
 
 ```javascript
+// install with npm install udt-iou-error
 const getIOU = require("udt-iou-error")
 
 const annotation1 = [
