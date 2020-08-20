@@ -2,6 +2,8 @@
 
 Compute the intersection over union error of groups of polygons ([UDT regions](https://github.com/UniversalDataTool/udt-format/blob/master/interfaces/image_segmentation.md)). Created primarily for use with the [Universal Data Tool](https://universaldatatool.com).
 
+All x/y coordinates should be in a `1x1` area, anything outside of the `1x1` area won't be considered. (If you want to change this behavior to something more configurable, PRs are welcome!)
+
 ```javascript
 // install with npm install udt-iou-error
 const getIOU = require("udt-iou-error")
