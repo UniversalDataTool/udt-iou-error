@@ -98,4 +98,7 @@ function getIOU(ann1, ann2) {
   return totalIntersectionArea / totalUnionArea
 }
 
-module.exports = getIOU
+module.exports = {
+  getIOU,
+  getPolygonFromUDTRegions,
+}
