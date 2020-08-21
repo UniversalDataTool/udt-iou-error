@@ -103,3 +103,52 @@ test("intersection over union with perfectly overlapping but different classific
   )
   t.is(iou.toFixed(3), "0.000")
 })
+
+test("intersection with disjoint union", (t) => {
+  const disjointUnion = [
+    {
+      regionType: "bounding-box",
+      centerX: 0.75,
+      centerY: 0.5,
+      width: 0.1,
+      height: 0.1,
+    },
+    {
+      regionType: "bounding-box",
+      centerX: 0.25,
+      centerY: 0.5,
+      width: 0.1,
+      height: 0.1,
+    },
+  ]
+  const iou1 = getIOU(disjointUnion, [
+    {
+      regionType: "bounding-box",
+      centerX: 0.7,
+      centerY: 0.5,
+      width: 0.1,
+      height: 0.1,
+    },
+  ])
+  const iou2 = getIOU(disjointUnion, [
+    {
+      regionType: "bounding-box",
+      centerX: 0.3,
+      centerY: 0.5,
+      width: 0.1,
+      height: 0.1,
+    },
+  ])
+  const iou3 = getIOU(disjointUnion, [
+    {
+      regionType: "bounding-box",
+      centerX: 0.5,
+      centerY: 0.5,
+      width: 1,
+      height: 0.02,
+    },
+  ])
+  t.is(iou1.toFixed(3), "0.200")
+  t.is(iou2.toFixed(3), "0.200")
+  t.is(iou3.toFixed(3), "0.111")
+})

@@ -32,9 +32,10 @@ function getPolygonFromUDTRegions(regions, classification) {
   if (firstPolyIndex === -1) return []
   let outputPoly = [polys[firstPolyIndex]]
 
-  for (const poly of polys.slice(firstPolyIndex + 1)) {
-    if (poly.classification === classification) {
-      outputPoly = polygon.union(...outputPoly, poly)
+  for (let i = 1; i < polys.length; i++) {
+    const poly = polys[i]
+    if (udtPolygons[i].classification === classification) {
+      outputPoly = [...outputPoly, poly]
     } else {
       // outputPoly = polygon.subtract(outputPoly, poly)
       outputPoly = outputPoly.flatMap((innerPoly) => {
