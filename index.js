@@ -5,6 +5,7 @@ function getPolygonFromUDTRegions(regions, classification) {
     .map((r) => {
       switch (r.regionType || r.type) {
         case "polygon":
+          if (r.points.length < 3) return null
           return r
         case "bounding-box":
           return {

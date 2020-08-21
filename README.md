@@ -72,5 +72,5 @@ const annotation2 = [
 ]
 
 getIOU(annotation1, annotation2)
-// >> 0.2
+// >> 0.259
 ```
