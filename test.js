@@ -1,5 +1,5 @@
 const test = require("ava")
-const { getIOU } = require("./")
+const { getIOU } = require("./index.js")
 
 test("intersection over union", (t) => {
   const iou = getIOU(

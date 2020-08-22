@@ -1,4 +1,5 @@
 const { polygon } = require("polygon-tools")
+const Offset = require("polygon-offset")
 
 function getPolygonFromUDTRegions(regions, classification) {
   const udtPolygons = regions
@@ -51,7 +52,34 @@ function sumArea(polygons) {
   return polygons.map(polygon.area).reduce((acc, area) => acc + area, 0)
 }
 
-function getIOU(ann1, ann2) {
+function inflate(polygons, amount) {
+  return polygons.flatMap((polygon) => {
+    const offset = new Offset()
+    return offset.data(polygon).margin(amount)
+  })
+}
+
+function getUnionAndIntersection(p1, p2) {
+  const fullArea = [
+    [0, 0],
+    [1, 0],
+    [1, 1],
+    [0, 1],
+  ]
+
+  const fullAreaMinusP1 = polygon.subtract(fullArea, ...p1)
+  const fullAreaMinusP2 = polygon.subtract(fullArea, ...p2)
+  const fullAreaMinusP1P2 = polygon.subtract(fullArea, ...p1, ...p2)
+
+  const p1Area = 1 - sumArea(fullAreaMinusP1)
+  const p2Area = 1 - sumArea(fullAreaMinusP2)
+  const unionArea = 1 - sumArea(fullAreaMinusP1P2)
+  const intersectionArea = p1Area + p2Area - unionArea
+  return { unionArea, intersectionArea }
+}
+
+// Public Method, Takes UDT Regions and returns I/O
+function getIOU(ann1, ann2, { borderMargin = 0 } = {}) {
   const classifications = Array.from(
     new Set([
       ...ann1.map((s) => s.classification),
@@ -66,35 +94,27 @@ function getIOU(ann1, ann2) {
     const p1 = getPolygonFromUDTRegions(ann1, classification)
     const p2 = getPolygonFromUDTRegions(ann2, classification)
 
-    const fullArea = [
-      [0, 0],
-      [1, 0],
-      [1, 1],
-      [0, 1],
-    ]
+    const { unionArea, intersectionArea } = getUnionAndIntersection(p1, p2)
 
-    const fullAreaMinusP1 = polygon.subtract(fullArea, ...p1)
-    const fullAreaMinusP2 = polygon.subtract(fullArea, ...p2)
-    const fullAreaMinusP1P2 = polygon.subtract(fullArea, ...p1, ...p2)
+    if (borderMargin === 0) {
+      totalUnionArea += unionArea
+      totalIntersectionArea += intersectionArea
+      continue
+    }
 
-    const p1Area = 1 - sumArea(fullAreaMinusP1)
-    const p2Area = 1 - sumArea(fullAreaMinusP2)
-    const unionArea = 1 - sumArea(fullAreaMinusP1P2)
-    const intersectionArea = p1Area + p2Area - unionArea
+    const p1Inflated = inflate(p1, borderMargin)
+    const p2Inflated = inflate(p2, borderMargin)
 
-    // console.log({
-    //   classification,
-    //   p1Area,
-    //   p2Area,
-    //   unionArea,
-    //   intersectionArea,
-    // })
-    totalUnionArea += unionArea
-    totalIntersectionArea += intersectionArea
+    const { intersectionArea: infA } = getUnionAndIntersection(p1Inflated, p2)
+    const { intersectionArea: infB } = getUnionAndIntersection(p1, p2Inflated)
+
+    const infIntersection = infA + infB - intersectionArea
+
+    return infIntersection / unionArea
   }
 
   // console.log({ totalUnionArea, totalIntersectionArea })
-  if (totalUnionArea === 0) return 1
+  if (totalUnionArea <= 0.0001) return 1
 
   return totalIntersectionArea / totalUnionArea
 }
