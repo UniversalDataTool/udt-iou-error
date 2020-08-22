@@ -1,9 +1,9 @@
 {
   "name": "udt-iou-error",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "main": "dist/index.js",
   "scripts": {
-    "test": "ava test2.js",
+    "test": "ava",
     "build": "parcel build index.js"
   },
   "devDependencies": {

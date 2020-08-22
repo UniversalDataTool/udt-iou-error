@@ -35,7 +35,7 @@ function getPolygonFromUDTRegions(regions, classification) {
   for (let i = 1; i < polys.length; i++) {
     const poly = polys[i]
     if (udtPolygons[i].classification === classification) {
-      outputPoly = [...outputPoly, poly]
+      outputPoly = polygon.union(...outputPoly, poly)
     } else {
       // outputPoly = polygon.subtract(outputPoly, poly)
       outputPoly = outputPoly.flatMap((innerPoly) => {
